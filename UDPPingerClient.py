@@ -14,11 +14,11 @@ for ping in range(1, 11):
     clientSocket = socket(AF_INET, SOCK_DGRAM)
     clientSocket.settimeout(1)
 
-    #Create ping message
-    message = "Ping " + str(ping)
-
     #Start ping timer
     start_time = time.time()
+
+    #Create ping message and format time
+    message = "Ping " + str(ping) + " {}".format(time.strftime("%H:%M:%S", time.localtime(start_time)))
 
     #Attach message and send to server socket
     clientSocket.sendto(message.encode(), (serverName, serverPort))
@@ -32,10 +32,10 @@ for ping in range(1, 11):
         
         #Pause timer to calculate round-trip time (in seconds)
         return_time = time.time()
-        rtt = return_time - start_time
+        rtt = round(return_time - start_time, 6)
     
         #Output PING results
-        print(modifiedMessage.decode() + " {}".format(rtt))
+        print(modifiedMessage.decode() + ": RTT={} s".format(rtt))
 
 
     #If timeout error, print 'Request timed out'
